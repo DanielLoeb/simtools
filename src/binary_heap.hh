@@ -65,8 +65,8 @@ namespace simtools
 			bool test_consistency() const;
 			
 			void clear();
-			friend bool check_anni(const binary_heap<annihilation> &inanni);
-			friend bool check_anni_pointers(const binary_heap<annihilation> &inannis);
+// 			friend bool check_anni(const binary_heap<annihilation> &inanni);
+// 			friend bool check_anni_pointers(const binary_heap<annihilation> &inannis);
 		protected:
 			long unsigned get_pos_depth(const long unsigned &position) const;
 			

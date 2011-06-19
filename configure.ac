@@ -34,7 +34,7 @@ LT_INIT
 AC_PROG_INSTALL
 
 # Turn on warnings
-[CXXFLAGS="${CXXFLAGS} -Wall"]
+[CXXFLAGS="${CXXFLAGS}"]
 
 # Define some switches
 

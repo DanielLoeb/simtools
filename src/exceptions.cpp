@@ -11,7 +11,7 @@ simtools::RuntimeError::RuntimeError(RuntimeError& oldone)
 
 simtools::RuntimeError::RuntimeError(const RuntimeError& oldone): message(oldone.message) {}
 	
-const char* RuntimeError::what() const throw()
+const char* simtools::RuntimeError::what() const throw()
 {
 	return message.c_str();
 }
@@ -20,21 +20,21 @@ simtools::RuntimeError::~RuntimeError() throw()
 {
 }
 
-simtools::string tostr(size_t size)
+string simtools::tostr(size_t size)
 {
 	std::stringstream ss;
 	ss << size;
 	return ss.str();
 }
 
-simtools::string tostr(double val)
+string simtools::tostr(double val)
 {
 	std::stringstream ss;
 	ss << val;
 	return ss.str();
 }
 
-simtools::string tostr(unsigned int val)
+string simtools::tostr(unsigned int val)
 {
 	std::stringstream ss;
 	ss << val;
