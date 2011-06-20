@@ -53,6 +53,10 @@ print "Heap test...",
 if resprint(ttt.heap_test()):
 	failed = True
 
+print "Red black tree test..."
+if resprint(ttt.red_black_test()):
+	failed = True
+
 print
 if failed:
 	print RED + "There were failed Tests." + CEND

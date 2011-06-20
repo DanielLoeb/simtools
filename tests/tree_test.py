@@ -28,7 +28,7 @@ def build(debug=False):
 	
 	for line in pres.stderr:
 		errll.append(line)
-		
+	
 	filename = 'growing_test'
 	
 	toremove = apath + filename
@@ -45,7 +45,7 @@ def build(debug=False):
 	
 	for line in pres2.stderr:
 		errll.append(line)
-		
+	
 	filename = 'heap_test'
 	
 	toremove = apath + filename
@@ -56,6 +56,23 @@ def build(debug=False):
 		compilecommands = ['g++', '-Wall', '-ggdb3', '-L' +curdir, '-lsimtools', 'heap_test.cpp', '-o', filename]
 	else:
 		compilecommands = ['g++', '-Wall', '-O3', '-L' +curdir, '-lsimtools', 'heap_test.cpp', '-o', filename]
+	
+	pres3 = subprocess.Popen(compilecommands, stderr=subprocess.PIPE)
+	pres3.wait()
+	
+	for line in pres3.stderr:
+		errll.append(line)
+	
+	filename = 'rb_test'
+	
+	toremove = apath + filename
+	if(os.path.exists(toremove)):
+		os.remove(toremove)
+		
+	if debug:
+		compilecommands = ['g++', '-Wall', '-ggdb3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
+	else:
+		compilecommands = ['g++', '-Wall', '-O3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
 	
 	pres3 = subprocess.Popen(compilecommands, stderr=subprocess.PIPE)
 	pres3.wait()
@@ -76,3 +93,6 @@ def binary_test():
 
 def heap_test():
 	return runtest('./heap_test')
+
+def red_black_test():
+	return runtest('./rb_test')
