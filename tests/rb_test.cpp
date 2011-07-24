@@ -136,13 +136,13 @@ int main(int argc, char* argv[])
 		trbt.insert(*trrs1++);
 	}
 	
-	double sval = (trbt.find_smallest())->value;
-	double bval = (trbt.find_biggest())->value;
+	double sval = *(trbt.find_smallest());
+	double bval = *(trbt.find_biggest());
 	
 	red_black_tree<double>::iterator low = trbt.find_smaller_than(sval/2.);
 	red_black_tree<double>::iterator high = trbt.find_bigger_than(bval*2.);
 	
-	if (low or high)
+	if (not((low == NULL) or (high == NULL)))
 	{
 		cerr << "Red black tree returned iterator for out of bound request." << endl;
 		all_ok = false;
@@ -151,13 +151,13 @@ int main(int argc, char* argv[])
 	red_black_tree<double>::iterator low2 = trbt.find_smaller_than((sval+bval)/2.);
 	red_black_tree<double>::iterator high2 = trbt.find_bigger_than((sval+bval)/2.);
 	
-	if ((not low2) or (not high2))
+	if ((low2 == NULL) or (high2 == NULL))
 	{
 		cerr << "Red black tree failed to return iterator for in bound request." << endl;
 		all_ok = false;
 	}
 	
-	if ((not (low2->value < (sval+bval)/2.)) or (not (high2->value > (sval+bval)/2.)))
+	if ((not (*low2 < (sval+bval)/2.)) or (not (*high2 > (sval+bval)/2.)))
 	{
 		cerr << "Red black tree failed to value lower or higher than requested value." << endl;
 		all_ok = false;

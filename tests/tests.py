@@ -53,8 +53,12 @@ print "Heap test...",
 if resprint(ttt.heap_test()):
 	failed = True
 
-print "Red black tree test..."
+print "Red black tree test...",
 if resprint(ttt.red_black_test()):
+	failed = True
+
+print "Red-black iterator test...",
+if resprint(ttt.red_black_iterator_test()):
 	failed = True
 
 print

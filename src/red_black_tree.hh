@@ -44,6 +44,11 @@ namespace simtools
 		
 		bool operator< (const rb_entry<data_t> &right);
 		bool operator> (const rb_entry<data_t> &right);
+		
+		
+		bool operator< (const data_t &right);
+		bool operator> (const data_t &right);
+		
 		rb_entry *left;
 		rb_entry *right;
 		rb_entry *parent;
@@ -65,6 +70,17 @@ namespace simtools
 	}
 
 
+	template<typename data_t> bool rb_entry<data_t>::operator< (const data_t &right)
+	{
+		return value < right;
+	}
+
+	template<typename data_t> bool rb_entry<data_t>::operator> (const data_t &right)
+	{
+		return right < value;
+	}
+
+
 	template<typename data_t> rb_entry<data_t>::~rb_entry()
 	{
 		if (left)
@@ -76,12 +92,139 @@ namespace simtools
 	template<typename data_t> class red_black_tree
 	{
 		public:
-			typedef rb_entry<data_t>* iterator;
-			typedef rb_entry<data_t>* const const_iterator;
+			class const_iterator;
+			
+			class iterator
+			{
+				public:
+					iterator(rb_entry<data_t> *input)
+					: pointer(input)
+					{}
+					
+					data_t* operator->()
+					{
+						return &(pointer->value);
+					}
+					
+					data_t& operator*()
+					{
+						return pointer->value;
+					}
+					
+					bool operator==(const iterator &right) const
+					{
+						if (pointer == right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator==(const const_iterator &right) const
+					{
+						if (pointer == right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator==(const rb_entry<data_t>* right) const
+					{
+						if (pointer == right)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const iterator &right) const
+					{
+						if (pointer != right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const const_iterator &right) const
+					{
+						if (pointer != right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const rb_entry<data_t>* right) const
+					{
+						if (pointer != right)
+							return true;
+						return false;
+					}
+					
+					friend class red_black_tree<data_t>;
+				protected:
+					rb_entry<data_t>* pointer;
+			};
+			
+			class const_iterator
+			{
+				public:
+					const_iterator(const rb_entry<data_t> *input)
+					: pointer(input)
+					{}
+					
+					data_t* operator->() const
+					{
+						return &(pointer->value);
+					}
+					
+					data_t operator*() const
+					{
+						return pointer->value;
+					}
+					
+					bool operator==(const iterator &right) const
+					{
+						if (pointer == right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator==(const const_iterator &right) const
+					{
+						if (pointer == right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator==(const rb_entry<data_t>* right) const
+					{
+						if (pointer == right)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const iterator &right) const
+					{
+						if (pointer != right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const const_iterator &right) const
+					{
+						if (pointer != right.pointer)
+							return true;
+						return false;
+					}
+					
+					bool operator!=(const rb_entry<data_t>* right) const
+					{
+						if (pointer != right)
+							return true;
+						return false;
+					}
+					
+					friend class red_black_tree<data_t>;
+				protected:
+					rb_entry<data_t>* pointer;
+			};
 			
 			red_black_tree();
 			~red_black_tree();
-			rb_entry<data_t>* insert(const data_t &inval);
+			iterator insert(const data_t &inval);
 			template <typename d_t> friend ostream& operator<<(ostream& the_stream, const red_black_tree<d_t> &rbt);
 			
 			iterator find_biggest(unsigned long N = 0);
@@ -161,7 +304,7 @@ namespace simtools
 		{
 			if (tmp->value == inval)
 			{
-				return tmp;
+				return iterator(tmp);
 			}
 			if (tmp->value < inval)
 			{
@@ -172,7 +315,7 @@ namespace simtools
 				tmp = tmp->left;
 			}
 		}
-		return NULL;
+		return iterator(NULL);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::iterator red_black_tree<data_t>::find_smaller_than(const data_t &inval)
@@ -194,8 +337,8 @@ namespace simtools
 		}
 		if (lastfound)
 			if (inval < lastfound->value)
-				return NULL;
-		return lastfound;
+				return iterator(NULL);
+		return iterator(lastfound);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_smaller_than_const(const data_t &inval) const
@@ -217,9 +360,8 @@ namespace simtools
 		}
 		if (lastfound)
 			if (inval < lastfound->value)
-				return NULL;
-		const_iterator ctmp = lastfound;
-		return ctmp;
+				return const_iterator(NULL);
+		return const_iterator(lastfound);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::iterator red_black_tree<data_t>::find_bigger_than(const data_t &inval)
@@ -241,8 +383,8 @@ namespace simtools
 		}
 		if (lastfound)
 			if (lastfound->value < inval)
-				return NULL;
-		return lastfound;
+				return iterator(NULL);
+		return iterator(lastfound);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_bigger_than_const(const data_t &inval) const
@@ -264,9 +406,8 @@ namespace simtools
 		}
 		if (lastfound)
 			if (lastfound->value < inval)
-				return NULL;
-		const_iterator ctmp = lastfound;
-		return ctmp;
+				return const_iterator(NULL);
+		return const_iterator(lastfound);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_same_const(const data_t &inval) const
@@ -277,8 +418,7 @@ namespace simtools
 		{
 			if (tmp->value == inval)
 			{
-				const_iterator ctmp = tmp;
-				return ctmp;
+				return const_iterator(tmp);
 			}
 			if (tmp->value < inval)
 			{
@@ -289,45 +429,14 @@ namespace simtools
 				tmp = tmp->left;
 			}
 		}
-		return NULL;
+		return const_iterator(NULL);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_biggest_const( unsigned long N) const
 	{
 		if ((tree == NULL) or (N >= tree->family_members))
 		{
-			return NULL;
-		}
-		
-		iterator tmp = tree;
-		unsigned long Nt = N;
-		while (tmp != NULL)
-		{
-			unsigned long right = tmp->right ? tmp->right->family_members: 0;
-			if (Nt < right)
-			{
-				tmp = tmp->right;
-				continue;
-			}
-			else if (Nt == right)
-			{
-				const_iterator ctmp = tmp;
-				return ctmp;
-			}
-			else
-			{
-				Nt -= right + 1;
-				tmp = tmp->left;
-			}
-		}
-		return NULL;
-	}
-
-	template<typename data_t> rb_entry<data_t>* red_black_tree<data_t>::find_biggest( unsigned long N)
-	{
-		if ((tree == NULL) or (N >= tree->family_members))
-		{
-			return NULL;
+			return const_iterator(NULL);
 		}
 		
 		rb_entry<data_t>* tmp = tree;
@@ -342,7 +451,7 @@ namespace simtools
 			}
 			else if (Nt == right)
 			{
-				return tmp;
+				return const_iterator(tmp);
 			}
 			else
 			{
@@ -350,14 +459,44 @@ namespace simtools
 				tmp = tmp->left;
 			}
 		}
-		return NULL;
+		return const_iterator(NULL);
 	}
 
-	template<typename data_t> rb_entry<data_t>* red_black_tree<data_t>::find_smallest(unsigned long N)
+	template<typename data_t> typename red_black_tree<data_t>::iterator red_black_tree<data_t>::find_biggest( unsigned long N)
 	{
 		if ((tree == NULL) or (N >= tree->family_members))
 		{
-			return NULL;
+			return iterator(NULL);
+		}
+		
+		rb_entry<data_t>* tmp = tree;
+		unsigned long Nt = N;
+		while (tmp != NULL)
+		{
+			unsigned long right = tmp->right ? tmp->right->family_members: 0;
+			if (Nt < right)
+			{
+				tmp = tmp->right;
+				continue;
+			}
+			else if (Nt == right)
+			{
+				return iterator(tmp);
+			}
+			else
+			{
+				Nt -= right + 1;
+				tmp = tmp->left;
+			}
+		}
+		return iterator(NULL);
+	}
+
+	template<typename data_t> typename red_black_tree<data_t>::iterator red_black_tree<data_t>::find_smallest(unsigned long N)
+	{
+		if ((tree == NULL) or (N >= tree->family_members))
+		{
+			return iterator(NULL);
 		}
 		
 		rb_entry<data_t>* tmp = tree;
@@ -372,7 +511,7 @@ namespace simtools
 			}
 			else if (Nt == left)
 			{
-				return tmp;
+				return iterator(tmp);
 			}
 			else
 			{
@@ -380,14 +519,14 @@ namespace simtools
 				tmp = tmp->right;
 			}
 		}
-		return NULL;
+		return iterator(NULL);
 	}
 
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_smallest_const(unsigned long N) const
 	{
 		if ((tree == NULL) or (N >= tree->family_members))
 		{
-			return NULL;
+			return const_iterator(NULL);
 		}
 		
 		iterator tmp = tree;
@@ -402,8 +541,7 @@ namespace simtools
 			}
 			else if (Nt == left)
 			{
-				const_iterator ctmp = tmp;
-				return ctmp;
+				return const_iterator(tmp);
 			}
 			else
 			{
@@ -411,14 +549,15 @@ namespace simtools
 				tmp = tmp->right;
 			}
 		}
-		return NULL;
+		return const_iterator(NULL);
 	}
 
-	template<typename data_t> void red_black_tree<data_t>::remove(iterator todelete)
+	template<typename data_t> void red_black_tree<data_t>::remove(iterator tdp)
 	{
 		// First check, whether or not the node has at most one child. If it doesn't, replace it with one that does.
 		
-		rb_entry<data_t>* toswap = todelete;
+		rb_entry<data_t>* toswap = tdp.pointer;
+		rb_entry<data_t>* todelete = tdp.pointer;
 		if ((todelete->left) and (todelete->right))
 		{
 			
@@ -1110,7 +1249,7 @@ namespace simtools
 			return NULL;
 	}
 
-	template<typename data_t> rb_entry<data_t>* red_black_tree<data_t>::insert(const data_t &inval)
+	template<typename data_t> typename red_black_tree<data_t>::iterator red_black_tree<data_t>::insert(const data_t &inval)
 	{
 		rb_entry<data_t>* newval = new rb_entry<data_t>(inval);
 		newval->me = newval;
@@ -1142,7 +1281,7 @@ namespace simtools
 		}
 		insert_case1(*tptr);
 
-		return newval->me;
+		return iterator(newval->me);
 	}
 
 	template <typename d_t> ostream& operator<<(ostream& the_stream, const red_black_tree<d_t> &rbt)

@@ -74,10 +74,27 @@ def build(debug=False):
 	else:
 		compilecommands = ['g++', '-Wall', '-O3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
 	
-	pres3 = subprocess.Popen(compilecommands, stderr=subprocess.PIPE)
-	pres3.wait()
+	pres4 = subprocess.Popen(compilecommands, stderr=subprocess.PIPE)
+	pres4.wait()
 	
-	for line in pres3.stderr:
+	for line in pres4.stderr:
+		errll.append(line)
+	
+	filename = 'rb_iterator_test'
+	
+	toremove = apath + filename
+	if(os.path.exists(toremove)):
+		os.remove(toremove)
+		
+	if debug:
+		compilecommands = ['g++', '-Wall', '-ggdb3', '-L' +curdir, '-lsimtools', 'rb_iterator_test.cpp', '-o', filename]
+	else:
+		compilecommands = ['g++', '-Wall', '-O3', '-L' +curdir, '-lsimtools', 'rb_iterator_test.cpp', '-o', filename]
+	
+	pres5 = subprocess.Popen(compilecommands, stderr=subprocess.PIPE)
+	pres5.wait()
+	
+	for line in pres5.stderr:
 		errll.append(line)
 	
 	if len(errll) > 0:
@@ -96,3 +113,6 @@ def heap_test():
 
 def red_black_test():
 	return runtest('./rb_test')
+
+def red_black_iterator_test():
+	return runtest('./rb_iterator_test')

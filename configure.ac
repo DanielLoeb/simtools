@@ -154,6 +154,7 @@ AC_SUBST(MOD_LDFLAGS)
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+simtools.pc
 ])
 
 AC_OUTPUT

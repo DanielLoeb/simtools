@@ -52,6 +52,10 @@ if resprint(ttt.build(True)):
 #if resprint(ttt.growing_test()):
 	#failed = True
 
-print "Heap test...",
-if resprint(ttt.heap_test()):
+#print "Heap test...",
+#if resprint(ttt.heap_test()):
+	#failed = True
+
+print "Red-black iterator test...",
+if resprint(ttt.red_black_iterator_test()):
 	failed = True
