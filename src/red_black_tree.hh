@@ -19,9 +19,6 @@
 #include <string>
 #include <stddef.h>
 
-//#include <iostream>
-//using std::cout;
-
 using std::ostream;
 using std::endl;
 using std::scientific;
@@ -92,134 +89,103 @@ namespace simtools
 	template<typename data_t> class red_black_tree
 	{
 		public:
-			class const_iterator;
+// 			class const_iterator;
 			
-			class iterator
+			template<typename d_t, bool isconst> class my_iterator_base
 			{
 				public:
-					iterator(rb_entry<data_t> *input)
+					my_iterator_base(rb_entry<data_t>* input)
 					: pointer(input)
 					{}
 					
-					data_t* operator->()
+#if __GNUC__ >= 4 && __GNUC_MINOR__ >= 5
+					explicit operator bool () const
 					{
-						return &(pointer->value);
+						if (pointer)
+							return true;
+						return false;
 					}
-					
-					data_t& operator*()
+#else
+					operator bool () const
 					{
-						return pointer->value;
+						if (pointer)
+							return true;
+						return false;
 					}
+#endif
 					
-					bool operator==(const iterator &right) const
+					template <bool disconst> bool operator==(const my_iterator_base<d_t, disconst> &right) const
 					{
 						if (pointer == right.pointer)
 							return true;
 						return false;
 					}
 					
-					bool operator==(const const_iterator &right) const
-					{
-						if (pointer == right.pointer)
-							return true;
-						return false;
-					}
-					
-					bool operator==(const rb_entry<data_t>* right) const
+					bool operator==(const rb_entry<d_t>* right) const
 					{
 						if (pointer == right)
 							return true;
 						return false;
 					}
 					
-					bool operator!=(const iterator &right) const
+					template <bool disconst> bool operator!=(const my_iterator_base<d_t, disconst> &right) const
 					{
 						if (pointer != right.pointer)
 							return true;
 						return false;
 					}
 					
-					bool operator!=(const const_iterator &right) const
-					{
-						if (pointer != right.pointer)
-							return true;
-						return false;
-					}
-					
-					bool operator!=(const rb_entry<data_t>* right) const
+					bool operator!=(const rb_entry<d_t>* right) const
 					{
 						if (pointer != right)
 							return true;
 						return false;
 					}
 					
-					friend class red_black_tree<data_t>;
+					friend class red_black_tree<d_t>;
 				protected:
-					rb_entry<data_t>* pointer;
+					rb_entry<d_t> *pointer;
 			};
 			
-			class const_iterator
+			
+			class const_iterator : public my_iterator_base<data_t, true>
 			{
 				public:
-					const_iterator(const rb_entry<data_t> *input)
-					: pointer(input)
+					const_iterator(rb_entry<data_t>* input)
+					: my_iterator_base<data_t, true>(input)
 					{}
-					
-					data_t* operator->() const
+					const data_t* operator->() const
 					{
-						return &(pointer->value);
+						return &(this->pointer->value);
 					}
 					
 					data_t operator*() const
 					{
-						return pointer->value;
+						return this->pointer->value;
 					}
+			};
+			
+			class iterator : public my_iterator_base<data_t, false>
+			{
+				public:
+					iterator(rb_entry<data_t>* input)
+					: my_iterator_base<data_t, false>(input)
+					{}
 					
-					bool operator==(const iterator &right) const
+					data_t* operator->()
 					{
-						if (pointer == right.pointer)
-							return true;
-						return false;
+						return &(this->pointer->value);
 					}
 					
-					bool operator==(const const_iterator &right) const
+					data_t& operator*()
 					{
-						if (pointer == right.pointer)
-							return true;
-						return false;
+						return this->pointer->value;
 					}
 					
-					bool operator==(const rb_entry<data_t>* right) const
+					operator const_iterator() const
 					{
-						if (pointer == right)
-							return true;
-						return false;
+						return const_iterator(this->pointer);
 					}
-					
-					bool operator!=(const iterator &right) const
-					{
-						if (pointer != right.pointer)
-							return true;
-						return false;
-					}
-					
-					bool operator!=(const const_iterator &right) const
-					{
-						if (pointer != right.pointer)
-							return true;
-						return false;
-					}
-					
-					bool operator!=(const rb_entry<data_t>* right) const
-					{
-						if (pointer != right)
-							return true;
-						return false;
-					}
-					
-					friend class red_black_tree<data_t>;
-				protected:
-					rb_entry<data_t>* pointer;
 			};
 			
 			red_black_tree();
@@ -344,8 +310,8 @@ namespace simtools
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_smaller_than_const(const data_t &inval) const
 	{
 		// We're looking for the biggest value entry in the tree that is smaller than inval.
-		iterator tmp = tree;
-		iterator lastfound = NULL;
+		rb_entry<data_t>* tmp = tree;
+		rb_entry<data_t>* lastfound = NULL;
 		while (tmp != NULL)
 		{
 			if (tmp->value < inval)
@@ -390,8 +356,8 @@ namespace simtools
 	template<typename data_t> typename red_black_tree<data_t>::const_iterator red_black_tree<data_t>::find_bigger_than_const(const data_t &inval) const
 	{
 		// We're looking for the smallest value entry in the tree that is bigger than inval.
-		iterator tmp = tree;
-		iterator lastfound = NULL;
+		rb_entry<data_t>* tmp = tree;
+		rb_entry<data_t>* lastfound = NULL;
 		while (tmp != NULL)
 		{
 			if (inval < tmp->value )
@@ -529,7 +495,7 @@ namespace simtools
 			return const_iterator(NULL);
 		}
 		
-		iterator tmp = tree;
+		rb_entry<data_t>* tmp = tree;
 		unsigned long Nt = N;
 		while (tmp != NULL)
 		{

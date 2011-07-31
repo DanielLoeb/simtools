@@ -30,6 +30,7 @@ namespace simtools
 	{
 		public:
 			binary_heap();
+			binary_heap(const binary_heap<data_t> &inheap);
 			~binary_heap();
 			
 			pair<data_t, long unsigned> get_smallest() const // Returns the smallest value (located at the heap base)
@@ -65,8 +66,6 @@ namespace simtools
 			bool test_consistency() const;
 			
 			void clear();
-// 			friend bool check_anni(const binary_heap<annihilation> &inanni);
-// 			friend bool check_anni_pointers(const binary_heap<annihilation> &inannis);
 		protected:
 			long unsigned get_pos_depth(const long unsigned &position) const;
 			
@@ -75,7 +74,20 @@ namespace simtools
 			pair<data_t, long unsigned> *data;
 			map<long unsigned, long unsigned> positions;	// Store index and position in the data set for each data point.
 	};
-
+	
+	template<typename data_t> binary_heap<data_t>::binary_heap(const binary_heap<data_t> &inheap)
+	{
+		depth = inheap.depth;
+		n_elements = inheap.n_elements;
+		long unsigned max_size = twoe(depth + 1)-1;
+		data = new pair<data_t, long unsigned>[max_size];
+		for (unsigned int i = 0; i < n_elements; i++)
+		{
+			data[i] = inheap.data[i];
+		}
+		positions = inheap.positions;
+	}
+	
 	template<typename data_t> bool binary_heap<data_t>::exists(const long unsigned &position) const
 	{
 		typename map<long unsigned, long unsigned>::const_iterator it = positions.find(position);
@@ -83,7 +95,7 @@ namespace simtools
 			return false;
 		return true;
 	}
-
+	
 	template<typename data_t> pair<data_t, long unsigned> binary_heap<data_t>::remove_smallest()
 	{
 		pair<data_t, long unsigned> smallest_value = data[0];
