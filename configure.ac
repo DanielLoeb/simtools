@@ -6,7 +6,7 @@ AC_PREREQ([2.64])
 # Versioning stuff
 m4_define(simtools_version_major, 1)
 m4_define(simtools_version_minor, 0)
-m4_define(simtools_version_micro, 0dev)
+m4_define(simtools_version_micro, 0)
 
 AC_INIT([human_net], [simtools_version_major().simtools_version_minor().simtools_version_micro()], [garak@zombiepiratesfromspace.eu])
 
@@ -62,24 +62,16 @@ AC_ARG_ENABLE([runtime-debug], [AS_HELP_STRING([--enable-runtime-debug],[enable 
     )
 
 ####################### Checks for libraries. #################################
-# Python
+
+# boost
+
+BOOST_REQUIRE([1.40.0])
+BOOST_MATH()
 
 # AM_PATH_PYTHON([2.5])
 # AX_PYTHON_DEVEL([>= '2.5'])
 # [CPPFLAGS="${CPPFLAGS} ${PYTHON_CPPFLAGS}"]
 # [LDFLAGS="${LDFLAGS} ${PYTHON_LDFLAGS} ${GSL_LDFLAGS}"]
-
-# Boost
-# AX_BOOST_BASE([1.38.0])
-# AX_BOOST_PYTHON
-# if test "$BOOST_PYTHON_LIB" = ""; then
-#     AC_MSG_ERROR([No usable version of  boost::python found])
-# fi
-
-# AX_BOOST_THREAD
-# if test "$BOOST_THREAD_LIB" == ""; then
-#     AC_MSG_ERROR([No usable version of boost::thread found])
-# fi
 
 # Python libraries
 # Numpy

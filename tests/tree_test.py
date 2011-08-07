@@ -70,7 +70,7 @@ def build(debug=False):
 		os.remove(toremove)
 		
 	if debug:
-		compilecommands = ['g++', '-Wall', '-ggdb3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
+		compilecommands = ['g++', '-std=c++0x' , '-Wall', '-ggdb3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
 	else:
 		compilecommands = ['g++', '-Wall', '-O3', '-L' +curdir, '-lsimtools', 'rb_test.cpp', '-o', filename]
 	
