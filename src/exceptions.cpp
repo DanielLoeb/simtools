@@ -20,24 +20,10 @@ simtools::RuntimeError::~RuntimeError() throw()
 {
 }
 
-string simtools::tostr(size_t size)
+template<typename data_t> string simtools::tostr(data_t value)
 {
 	std::stringstream ss;
-	ss << size;
-	return ss.str();
-}
-
-string simtools::tostr(double val)
-{
-	std::stringstream ss;
-	ss << val;
-	return ss.str();
-}
-
-string simtools::tostr(unsigned int val)
-{
-	std::stringstream ss;
-	ss << val;
+	ss << value;
 	return ss.str();
 }
 

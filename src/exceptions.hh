@@ -26,9 +26,7 @@ using std::string;
 
 namespace simtools
 {
-	string tostr(size_t size);
-	string tostr(double val);
-	string tostr(unsigned int val);
+	template<typename data_t> string tostr(data_t value);
 
 	struct RuntimeError: std::exception
 	{
