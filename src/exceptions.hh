@@ -51,4 +51,12 @@ namespace simtools
 #endif // USES_PYTHON
 } // End of namespace simtools.
 
+template<typename data_t> string simtools::tostr(data_t value)
+{
+	std::stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
+
 #endif // EXCEPTIONS_HH

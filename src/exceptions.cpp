@@ -20,13 +20,6 @@ simtools::RuntimeError::~RuntimeError() throw()
 {
 }
 
-template<typename data_t> string simtools::tostr(data_t value)
-{
-	std::stringstream ss;
-	ss << value;
-	return ss.str();
-}
-
 #ifdef USES_PYTHON
 void simtools::translate_RE(RuntimeError const &re)
 {
