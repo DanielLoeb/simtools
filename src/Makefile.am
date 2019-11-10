@@ -1,8 +1,6 @@
 ## Makefile.am -- Use automake to produce a makefile.in from this
 
-INCLUDES = -I$(top_srcdir)
-AM_CPPFLAGS =\
-    -DHAVE_CONFIG_H
+AM_CPPFLAGS = -I$(top_srcdir) -DHAVE_CONFIG_H
 
 AM_CXXFLAGS =\
     -Wall

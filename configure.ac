@@ -66,7 +66,7 @@ AC_ARG_ENABLE([runtime-debug], [AS_HELP_STRING([--enable-runtime-debug],[enable 
 # boost
 
 BOOST_REQUIRE([1.40.0])
-BOOST_MATH()
+#BOOST_MATH()
 
 # AM_PATH_PYTHON([2.5])
 # AX_PYTHON_DEVEL([>= '2.5'])

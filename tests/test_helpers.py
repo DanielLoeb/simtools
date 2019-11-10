@@ -14,13 +14,13 @@ def resprint(sim_res):
 	
 	if not sim_res[0]:
 		failed = True
-		print RED + "failed." + CEND
-		print
+		print(RED + "failed." + CEND)
+		print()
 		for entry in sim_res[1]:
-			print '\t',entry,
-		print
+			print('\t',entry)
+		print()
 	else:
-		print GREEN + "success!" + CEND
+		print(GREEN + "success!" + CEND)
 	
 	return failed
 

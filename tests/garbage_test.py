@@ -12,7 +12,7 @@ tmdname = "st_test"
 openstring = "rm -rf " + fulldir + "/"+ tmdname
 p = os.popen(openstring)
 
-print "Creating simtools test install... ",
+print ("Creating simtools test install... ")
 os.chdir(makedir)
 
 confstrings = ['./configure', '--disable-optimization', '--enable-debug' ,'--libdir=' + fulldir + "/" + tmdname, "--includedir=" + fulldir + "/" + tmdname]
@@ -40,7 +40,7 @@ os.chdir(fulldir)
 
 import tree_test as ttt
 
-print "Building tree tests... ",
+print ("Building tree tests... ")
 if resprint(ttt.build(True)):
 	failed = True
 
@@ -56,6 +56,6 @@ if resprint(ttt.build(True)):
 #if resprint(ttt.heap_test()):
 	#failed = True
 
-print "Red-black iterator test...",
+print ("Red-black iterator test...")
 if resprint(ttt.red_black_iterator_test()):
 	failed = True
